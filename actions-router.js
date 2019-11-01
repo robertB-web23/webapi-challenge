@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
     const id = req.params.id;
-    Actions.get(id)
+    Projects.getProjectActions(id)
         .then(action => {
             res.status(200).json(action)
         })
@@ -31,9 +31,17 @@ router.get('/:id', (req, res) => {
 
 //POST Action
 
-router.post('/',validateProjectExistence, (req, res) => {
-    newAction = req.body;
-    Actions.insert(newAction)
+router.post('/:project_id', (req, res) => {
+    //newAction = req.body;
+    const {project_id} = req.params;
+    const objToPass = {
+        project_id,
+        description: req.body.description,
+        notes: req.body.notes,
+        completed: req.body.completed
+    }
+    console.log(objToPass)
+    Actions.insert(objToPass)
     .then(action => {
         res.status(201).json(action)
     })
